@@ -100,7 +100,7 @@ with st.sidebar.expander("Models"):
     absa_name = _pick("Aspect sentiment", mdl.ABSA_MODELS, "absa", preset)
     zsc_name = _pick("Zero-shot (custom aspects, values, themes)", mdl.ZERO_SHOT_MODELS, "zero_shot", preset)
     llm_name = _pick("LLM (automatic aspects, needs)", mdl.LLM_MODELS, "llm", preset)
-    batch_size = st.select_slider("Batch size", [4, 8, 16, 32], value=16)
+    batch_size = st.select_slider("Batch size", [4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048], value=32)
 
 max_rows = st.sidebar.number_input("Max reviews to analyse", 10, 100_000, 500, step=50,
                                    help="Transformers on CPU take roughly 0.2 to 2 seconds per review.")
@@ -108,7 +108,7 @@ max_rows = st.sidebar.number_input("Max reviews to analyse", 10, 100_000, 500, s
 
 # --------------------------------------------------------------------------- data
 
-st.title("💬 Aspect-Based Sentiment Analysis")
+st.title("Aspect-Based Sentiment Analysis (ABSA)")
 st.caption("Understand what customers talk about, how they feel about each aspect, and what they value, "
            "using pretrained Hugging Face transformers and a small LLM. No training needed.")
 
