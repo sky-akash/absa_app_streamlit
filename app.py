@@ -16,10 +16,11 @@ from absa import models as mdl
 from absa import viz
 from absa.analysis import DEFAULT_THEMES, DEFAULT_VALUE_LABELS, AnalysisConfig, Models, run_analysis
 from absa.data_io import DataError, load_reviews
+# from absa.hf import HFTranslator
 
 SAMPLE_FILE = Path(__file__).parent / "sample_data" / "sample_reviews.csv"
 
-st.set_page_config(page_title="Aspect-Based Sentiment Analysis", page_icon="💬", layout="wide")
+st.set_page_config(page_title="Aspect-Based Sentiment Analysis", page_icon="o", layout="wide")
 
 
 # --------------------------------------------------------------------------- cached models
@@ -108,7 +109,7 @@ max_rows = st.sidebar.number_input("Max reviews to analyse", 10, 100_000, 500, s
 
 # --------------------------------------------------------------------------- data
 
-st.title("💬 Aspect-Based Sentiment Analysis")
+st.title("Aspect-Based Sentiment Analysis")
 st.caption("Understand what customers talk about, how they feel about each aspect, and what they value, "
            "using pretrained Hugging Face transformers and a small LLM. No training needed.")
 
@@ -128,6 +129,24 @@ if df is None:
 if len(df) > max_rows:
     st.warning(f"The file has {len(df):,} reviews; analysing the first {int(max_rows):,}. Raise the limit in the sidebar.")
     df = df.head(int(max_rows))
+
+
+# for lang translation
+if st.sidebar.checkbox("Translate reviews to English first"):
+    with st.spinner("Translating comments to English... (this may take a moment)"):
+        # Import the translator you added to hf.py
+        from absa.hf import HFTranslator
+        
+        @st.cache_resource
+        def get_translator():
+            return HFTranslator()
+            
+        translator = get_translator()
+        
+        # Keep the original for reference, overwrite 'comment' for the pipeline
+        df['original_comment'] = df['comment']
+        df['comment'] = translator.translate_to_english(df['comment'].tolist())
+        st.sidebar.success("Translation complete!")
 
 with st.expander(f"Preview data ({len(df):,} reviews)"):
     st.dataframe(df, width="stretch", hide_index=True)

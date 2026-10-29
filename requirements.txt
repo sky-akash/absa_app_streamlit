@@ -9,3 +9,4 @@ sentencepiece>=0.2
 protobuf>=4.25
 accelerate>=0.30
 pytest>=8.0
+langdetect>=1.0.9
