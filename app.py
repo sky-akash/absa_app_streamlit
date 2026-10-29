@@ -20,7 +20,7 @@ from absa.data_io import DataError, load_reviews
 
 SAMPLE_FILE = Path(__file__).parent / "sample_data" / "sample_reviews.csv"
 
-st.set_page_config(page_title="Aspect-Based Sentiment Analysis", page_icon="o", layout="wide")
+st.set_page_config(page_title="Aspect-Based Sentiment Analysis (ABSA)", page_icon="o", layout="wide")
 
 
 # --------------------------------------------------------------------------- cached models
